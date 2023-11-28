@@ -1,4 +1,48 @@
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import Input from "../../../../components/Input";
+import { SCREEN_NAMES } from "../../../../navigation/constants";
+import { createAccount } from "../../../../helper";
+
 const SignupForm = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, updateErrorMessage] = useState("");
+  const [errorType, setErrorType] = useState("");
+  const [isLoading, setisLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+
+  const createUserAccount = async (e) => {
+    e.preventDefault();
+    setisLoading(true);
+    updateErrorMessage('')
+    setErrorType('')
+    const [error, payload] = await createAccount({
+      name,
+      email,
+      password
+    });
+    setisLoading(false);
+    if (error) {
+      alert('Error creating account')
+      console.log(error)
+      setError(true)
+      if (error.includes('email-already-in-use')){
+        setErrorType('email')
+        updateErrorMessage('Email already in use')
+      }
+      if (error.includes('weak-password')){
+        setErrorType('password')
+        updateErrorMessage('Password too weak! 8 Characters expected')
+      }
+    }
+
+    if (payload) {
+      location.assign(SCREEN_NAMES.HOME)
+    }
+  }
   return (
     <div className="row justify-content-center w-100">
       <div className="col-md-8 col-lg-6 col-xxl-3">
@@ -15,53 +59,46 @@ const SignupForm = () => {
               />
             </a>
             <p className="text-center">Your Social Campaigns</p>
-            <form>
-              <div className="mb-3">
-                <label htmlFor="exampleInputtext1" className="form-label">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="exampleInputtext1"
-                  aria-describedby="textHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="exampleInputPassword1" className="form-label">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="exampleInputPassword1"
-                />
-              </div>
-              <a
-                href="./index.html"
+            <form onSubmit={createUserAccount}>
+              <Input
+                placeholder="John Doe"
+                label="Name"
+                value={name}
+                handleChange={(e) => setName(e.target.value)}
+              />
+              <Input
+                type="email"
+                label="Email"
+                placeholder="johndoe@gmail.com"
+                value={email}
+                handleChange={(e) => setEmail(e.target.value)}
+                errorMessage={errorMessage}
+                showError={error && errorType === "email"}
+              />
+              <Input
+                type="password"
+                label="Password"
+                placeholder="****"
+                value={password}
+                handleChange={(e) => setPassword(e.target.value)}
+                errorMessage={errorMessage}
+                showError={error && errorType === "password"}
+              />
+              <button
+                type="submit"
+                disabled={isLoading}
                 className="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2"
               >
-                Sign Up
-              </a>
+                {isLoading ? 'loading...': ('Sign Up')}
+              </button>
               <div className="d-flex align-items-center justify-content-center">
                 <p className="fs-4 mb-0 fw-bold">Already have an Account?</p>
-                <a
+                <Link
                   className="text-primary fw-bold ms-2"
-                  href="./authentication-login.html"
+                  to={SCREEN_NAMES.LOGIN}
                 >
                   Sign In
-                </a>
+                </Link>
               </div>
             </form>
           </div>

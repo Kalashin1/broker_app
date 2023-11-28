@@ -17,4 +17,3 @@ const firebaseConfig = {
 let app = initializeApp(firebaseConfig)
 export let db = getFirestore(app)
 export let auth = getAuth(app)
-
