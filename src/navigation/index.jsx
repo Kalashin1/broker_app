@@ -5,6 +5,9 @@ import LoginPage from "../pages/auth/login";
 import SignupPage from "../pages/auth/signup";
 import BankWithdrawals from "../pages/dashboard/bank-withdrawal";
 import CryptoWithdrawal from "../pages/dashboard/crypto-withdrawal";
+import CreateInvestment from "../pages/dashboard/create-investment";
+import InvestedUsers from "../pages/dashboard/invested-users";
+import TopUp from "../pages/dashboard/top-up";
 
 const Router = createBrowserRouter([
   {
@@ -26,6 +29,18 @@ const Router = createBrowserRouter([
   {
     path: SCREEN_NAMES.CRYPTO_WITHDRAWAL,
     element: <CryptoWithdrawal />,
+  },
+  {
+    path: SCREEN_NAMES.CREATE_INVESTMENT,
+    element: <CreateInvestment />,
+  },
+  {
+    path: SCREEN_NAMES.INVESTED_USERS,
+    element: <InvestedUsers />,
+  },
+  {
+    path: SCREEN_NAMES.TOP_UP,
+    element: <TopUp />,
   },
 ]);
 
