@@ -36,6 +36,7 @@ const LoginForm = () => {
 
     if (payload) {
       alert('login successful!');
+      localStorage.setItem('user_id', payload.uid)
       location.assign(SCREEN_NAMES.HOME)
     }
   }

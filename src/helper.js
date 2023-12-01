@@ -178,29 +178,46 @@ export const updateRoi = async ({ id, num }) => {
   }
 };
 
-export const editProfile = async ({ 
-  user, 
-  plan, 
-  investments 
-}) => {
+export const editProfile = async ({ user, plan, investments }) => {
   try {
     let { city, region } = user;
-  console.log(user, plan, investments);
-  let _investment = investments.find((i) => i.id === plan);
+    console.log(user, plan, investments);
+    let _investment = investments.find((i) => i.id === plan);
 
-  _investment.startDate = new Date();
-  _investment.active = true;
-  console.log(_investment);
-  // Add a new document in collection "cities"
-  await updateDoc(doc(db, "plans", user.id), {
-    city,
-    region,
-    invested: true,
-    paused: false,
-    investments: [_investment],
-  });
-  return [null, 'Profile Updated!']
+    _investment.startDate = new Date();
+    _investment.active = true;
+    console.log(_investment);
+    // Add a new document in collection "cities"
+    await updateDoc(doc(db, "plans", user.id), {
+      city,
+      region,
+      invested: true,
+      paused: false,
+      investments: [_investment],
+    });
+    return [null, "Profile Updated!"];
   } catch (error) {
-    return [error.message, null]
+    return [error.message, null];
   }
 };
+
+export const getUserDocument = async (user_id) => {
+  if (!user_id) {
+    user_id = localStorage.getItem("user_id");
+  }
+  try {
+    const docRef = doc(db, "plans", user_id);
+    const docSnap = await getDoc(docRef);
+    console.log("Document data:", docSnap.data());
+    return docSnap.data();
+  } catch (error) {
+    return [error, null];
+  }
+};
+
+
+export const formatAsCurrency = ({number, style, currency, locality }) => new Intl.NumberFormat(locality, {
+  style,
+  currency,
+  maximumFractionDigits: 2
+}).format(number)

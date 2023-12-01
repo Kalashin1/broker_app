@@ -40,6 +40,7 @@ const SignupForm = () => {
     }
 
     if (payload) {
+      localStorage.setItem('user_id', payload.uid)
       location.assign(SCREEN_NAMES.HOME)
     }
   }
